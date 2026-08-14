@@ -1,0 +1,31 @@
+{
+  "name": "restaurant_ordering_system",
+  "version": "1.0.0",
+  "description": "Projeto Back-End",
+  "keywords": [
+    "back-end"
+  ],
+  "homepage": "https://github.com/Favoretto04/Projeto-Back-End#readme",
+  "bugs": {
+    "url": "https://github.com/Favoretto04/Projeto-Back-End/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Favoretto04/Projeto-Back-End.git"
+  },
+  "license": "ISC",
+  "author": "Kaue Favoretto",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc", 
+    "start": "node dist/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}
