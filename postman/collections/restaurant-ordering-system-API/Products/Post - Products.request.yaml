@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:3000/products
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "id": 5,
+        "category_id": 4,
+        "name": "Novo Produto",
+        "description": "Produto novo feito mal e porcamente.",
+        "price": 666
+    }
+order: 1564987285255389

@@ -1,0 +1,5 @@
+$kind: http-request
+name: New Request
+url: http://localhost:3000/categories/6b0550c3-ecca-4c69-a191-f2f4078c94eb
+method: GET
+order: 2862970577426735

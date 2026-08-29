@@ -1,70 +1,190 @@
 import express from "express";
 import { version } from "node:os";
+import { randomUUID } from "node:crypto";
 
 const app = express();
 
-const categories = [
+app.use(express.json());
+
+//====== INICIALIZAÇÃO DOS IDs DAS CATEGORIAS PRÉ CADASTRADAS ==================
+const pizzaCategoryId = randomUUID();
+const drinksCategoryId = randomUUID();
+const dessertsCategoryId = randomUUID();
+
+const categories = [ //Lista de categorias pré cadastradas
   {
-    "id": 1,
-    "name": "Eletrônicos",
-    "description": "Produtos e acessórios eletrônicos, como smartphones, computadores e periféricos."
+    "id": pizzaCategoryId,
+    "name": "Pizzas",
+    "description": "Pizzas tradicionais, especiais e sabores da casa."
   },
   {
-    "id": 2,
-    "name": "Casa e Jardim",
-    "description": "Produtos para decoração, organização, manutenção e cuidados com a casa e o jardim."
+    "id": drinksCategoryId,
+    "name": "Bebidas",
+    "description": "Refris, Aguás, Sucos."
   },
   {
-    "id": 3,
-    "name": "Esportes e Lazer",
-    "description": "Produtos e acessórios destinados à prática de esportes, atividades físicas e lazer."
+    "id": dessertsCategoryId,
+    "name": "Sobremesas",
+    "description": "Pizzas Doces, BonBons."
   }
 ]
 
-const products = [
+const products = [ //Lista de produtos pré cadastrados
   {
-    "id": 1,
-    "category_id": 1,
-    "name": "Smartphone Pro",
-    "description": "Smartphone com tela de alta resolução, câmera avançada e 256 GB de armazenamento.",
-    "price": 3499.90
+    "id": randomUUID(),
+    "category_id": pizzaCategoryId,
+    "name": "Pizza de Calabresa",
+    "description": "Pizza com fatias de calabresa.",
+    "price": 34.9
   },
   {
-    "id": 2,
-    "category_id": 1,
-    "name": "Fone de Ouvido Bluetooth",
-    "description": "Fone sem fio com cancelamento de ruído e bateria de longa duração.",
-    "price": 299.90
+    "id": randomUUID(),
+    "category_id": drinksCategoryId,
+    "name": "Coca-Cola Lata",
+    "description": "Lata de Coca-Cola 350ml.",
+    "price": 8.9
   },
   {
-    "id": 3,
-    "category_id": 2,
-    "name": "Luminária de Mesa LED",
-    "description": "Luminária moderna com iluminação LED ajustável para ambientes internos.",
-    "price": 129.90
+    "id": randomUUID(),
+    "category_id": dessertsCategoryId,
+    "name": "Pizza de Banana Nevada",
+    "description": "Pizza com banana de chocolate branco flambado.",
+    "price": 52.9
   },
-  {
-    "id": 4,
-    "category_id": 3,
-    "name": "Kit de Halteres",
-    "description": "Kit de halteres para exercícios de força e treinamento funcional em casa.",
-    "price": 249.90
-  }
 ]
 
-app.get("/", (req, res) => {
+app.get("/", (req, res) => { //Puxa os dados do SERVER
     res.status(200).json({
         message:"API Restaurante",
-        version: "1.0.0"
+        version: "1.0.0",
+        TITLE:"Tudo Filho Da PUTA"
     });
 });
 
-app.get("/categories", (req, res) => {
+//======================= Categories ======================
+
+app.get("/categories", (req, res) => { //Puxa todas as categorias
     res.status(200).json({categories});
 });
 
-app.get("/products", (req, res) => {
+app.get("/categories/:id", (req, res) => { //Puxa a categoria pelo ID
+  const category = categories.find((category) => {
+    return category.id == req.params.id;
+  });
+
+  if (!category){
+    return res.status(404).json({
+      message: "Categoria não encontrada!"
+    });
+  } 
+  res.status(200).json({category});
+});
+
+app.post("/categories", (req, res) => { //Posta a Categoria nova c/Id auto.
+  const category = {
+    id: randomUUID(),
+    ...req.body
+  }
+  categories.push(category);
+  res.status(201).json(category);
+});
+
+app.put("/categories/:id", (req, res) => { //Altera os dados de um Id existente
+  const category = categories.find((category) => {
+    return category.id == req.params.id;
+  });
+
+  if (!category){
+    return res.status(404).json({
+      message: "Categoria não encontrada!"
+    });
+  } 
+
+  category.name = req.body.name;
+  category.description = req.body.description;
+
+  res.status(200).json({category});
+});
+
+app.delete("/categories/:id", (req, res) => { //Deleta os dados de um Id existente
+  const category = categories.find((category) => {
+    return category.id == req.params.id;
+  });
+
+  if (!category){
+    return res.status(404).json({
+      message: "Categoria não encontrada!"
+    });
+  }
+
+  const index = categories.indexOf(category);
+  categories.splice(index, 1);
+
+  res.status(200).json({message:"Categoria Excluida com Exito"});
+});
+
+
+//==================== Products ============================
+
+app.get("/products", (req, res) => { //Puxa Todos os Produtos
     res.status(200).json({products});
 });
+
+app.get("/products/:id", (req, res) => { //Puxa o produto pelo ID
+  const product = products.find((product) => {
+    return product.id == req.params.id;
+  });
+
+  if (!product){
+    return res.status(404).json({
+      message: "Produto não encontrado!"
+    });
+  } 
+  res.status(200).json({product});
+});
+
+app.post("/products", (req, res) => { //Posta um novo produto c/ID auto
+  const product = {
+    id: randomUUID(),
+    ...req.body
+  };
+  products.push(product);
+  res.status(201).json(product);
+});
+
+app.put("/products/:id", (req, res) => { //Altera os dados de um Id existente
+  const product = products.find((product) => {
+    return product.id == req.params.id;
+  });
+
+  if (!product){
+    return res.status(404).json({
+      message: "Categoria não encontrada!"
+    });
+  } 
+
+  product.name = req.body.name;
+  product.description = req.body.description;
+
+  res.status(200).json({product});
+});
+
+app.delete("/products/:id", (req, res) => { //Deleta os dados de um Id existente
+  const product = products.find((product) => {
+    return product.id == req.params.id;
+  });
+
+  if (!product){
+    return res.status(404).json({
+      message: "Produto não encontrado!"
+    });
+  }
+
+  const index = products.indexOf(product);
+  products.splice(index, 1);
+
+  res.status(200).json({message:"Produto Excluido com Exito"});
+});
+
 
 export default app;

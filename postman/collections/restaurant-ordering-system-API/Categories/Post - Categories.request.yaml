@@ -1,0 +1,13 @@
+$kind: http-request
+name: Post - Categories
+url: http://localhost:3000/categories
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "id":4,
+        "name":"Categoria-Nova",
+        "description": "Teste categoria nova"
+    }
+order: 1178054102214959

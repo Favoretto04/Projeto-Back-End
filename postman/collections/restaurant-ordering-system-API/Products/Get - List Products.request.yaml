@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get - List Products
+url: http://localhost:3000/products
+method: GET
+order: 1787353188733
